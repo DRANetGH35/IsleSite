@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block content %}
+<div class="shell">
+{% include 'navbar.html' %}
+    <section style="text-align:center;">
+    <h1>Log In</h1>
+    <form method="post" action="login" class="container border rounded" style="padding: 10px;  width: 325px;">
+        <table>
+            <tr>
+                <td>
+                <label class="form-label" style="justify:right;">username</label>
+                </td>
+                <td>
+                <input class="form-text" type="text" id="username" name="username">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <label class="form-label">password</label>
+                </td>
+                <td>
+                <input class="form-text" type="password" id="password" name="password">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                <input class="btn btn-primary" type="submit" id="submit" name="sumbit">
+                </td>
+            </tr>
+        </table>
+    </form>
+    {% if error %}
+    <p class="form-label" id="errors" style="color: red;">{{ error }}</p>
+    {% endif %}
+    <div style="display:flex; flex-direction: column;">
+    <a href="/forgot_password">Forgot Password?</a>
+    <a href="/register">Register</a>
+    </div>
+</section>
+    {% include 'footer.html' %}
+    </div>
+
+{% endblock %}
