@@ -16,11 +16,18 @@
   <div class="shell">
 
 {% include 'navbar.html' %}
+    <div>
+    <h1 style="text-align:center;">Carnivores</h1>
+    </div>
 
-
-      {% include 'footer.html' %}
-
-  </div>
+{% for carnivore in carnivores %}
+    <section>
+      <h3>{{ carnivore }}</h3>
+      <img style="max-width: 96%; margin: 2%;" src="static/Dinosaurs/Carnivores/{{ carnivore }}">
+    </section>
+{% endfor %}
+{% include 'footer.html' %}
+</div>
 </body>
 </html>
 {% endblock %}

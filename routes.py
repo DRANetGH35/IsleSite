@@ -14,7 +14,11 @@ app = create_app()
 
 @app.route('/')
 def index():
-    return render_template('index.html', current_user=current_user)
+    carnivores = os.listdir('static/Dinosaurs/Carnivores')
+    herbivores = os.listdir('static/Dinosaurs/Herbivores')
+    omnivores = os.listdir('static/Dinosaurs/Omnivores')
+    images = carnivores + herbivores + omnivores
+    return render_template('index.html', current_user=current_user, carnivores=carnivores, herbivores=herbivores, omnivores=omnivores,)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
