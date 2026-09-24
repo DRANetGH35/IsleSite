@@ -18,7 +18,7 @@ def create_app():
     app.config['SERVER_NAME'] = '###.dradigital.net'
     app.config['PREFERRED_URL_SCHEME'] = 'https'
     app.config['APPLICATION_ROOT'] = '/'
-    app.config['SESSION_COOKIE_SECURE'] = True
+    app.config['SESSION_COOKIE_SECURE'] = False
     app.config['REMEMBER_COOKIE_SECURE'] = True  # Time the user out after 30 minutes
 
     from werkzeug.middleware.proxy_fix import ProxyFix
@@ -28,6 +28,12 @@ def create_app():
     login_manager.init_app(app)
     bootstrap.init_app(app)
     migrate = Migrate(app, db)
+
+    from routes import main_bp
+    from api import api_bp
+
+    app.register_blueprint(main_bp)
+    app.register_blueprint(api_bp)
 
 
     @login_manager.user_loader

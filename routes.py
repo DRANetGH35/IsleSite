@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Blueprint
 from flask_login import current_user, login_user, logout_user, login_required
 import os, random
 from sqlalchemy import select
@@ -10,9 +10,9 @@ from app import create_app
 from werkzeug.security import check_password_hash, generate_password_hash
 from tokens import generate_reset_token, verify_reset_token
 
-app = create_app()
+main_bp = Blueprint('main', __name__)
 
-@app.route('/')
+@main_bp.route('/')
 def index():
     carnivores = os.listdir('static/Dinosaurs/Carnivores')
     herbivores = os.listdir('static/Dinosaurs/Herbivores')
@@ -20,7 +20,7 @@ def index():
     images = carnivores + herbivores + omnivores
     return render_template('index.html', current_user=current_user, carnivores=carnivores, herbivores=herbivores, omnivores=omnivores,)
 
-@app.route('/login', methods=['GET', 'POST'])
+@main_bp.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == "POST":
@@ -38,7 +38,7 @@ def login():
         return render_template('account/login.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
+@main_bp.route('/register', methods=['GET', 'POST'])
 def register():
     error = None
     if request.method == "POST":
@@ -60,7 +60,7 @@ def register():
         return render_template('account/register.html')
 
 @login_required
-@app.route('/verify', methods=['GET', 'POST'])
+@main_bp.route('/verify', methods=['GET', 'POST'])
 def verify():
     if request.method == 'POST':
         verification_code = str(request.form.get('verification_code'))
@@ -73,7 +73,7 @@ def verify():
         return redirect(url_for('account/verify.html', error=error))
     return render_template('verify.html')
 
-@app.route('/forgot_password', methods=["GET", "POST"])
+@main_bp.route('/forgot_password', methods=["GET", "POST"])
 def forgot_password():
     if request.method == "POST":
         email = request.form.get('email')
@@ -86,7 +86,7 @@ def forgot_password():
         flash('If that account exists, instructions will be sent to your email')
     return render_template('account/forgot_password.html')
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+@main_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     email = verify_reset_token(token)
     if not email:
@@ -101,11 +101,11 @@ def reset_password(token):
         return redirect(url_for('index'))
     return render_template('reset_password.html', token=token)
 
-@app.route('/logout')
+@main_bp.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.errorhandler(404)
+@main_bp.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html")
